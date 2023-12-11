@@ -12,18 +12,18 @@ const userController = {
     },
 
     getOneUser(req, res) {
-        User.findById(req.params.userId)
+        User.findOne({ _id: req.params.userId })
         .select('-__v')
         .populate('friends')
         .populate('thoughts')
-        .then(userData => {
+        .then((userData) => {
             if (!userData) {
                 return res.status(404).json({ message: 'That user does not exist!' });
             }
 
             res.json(userData);
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err);
             res.status(500).json(err);
         });
@@ -31,8 +31,8 @@ const userController = {
 
     createUser(req, res) {
         User.create(req.body)
-        .then(userData => res.json(userData))
-        .catch(err => {
+        .then((userData) => res.json(userData))
+        .catch((err) => {
             console.log(err);
             res.status(500).json(err);
         });
@@ -48,14 +48,14 @@ const userController = {
                 new: true,
             }
         )
-        .then(userData => {
+        .then((userData) => {
             if(!userData) {
                 return res.status(404).json({ message: 'That user does not exist!' });
             }
 
             res.json(userData);
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err);
             res.status(500).json(err);
         });
@@ -63,7 +63,7 @@ const userController = {
 
     deleteUser(req, res) {
         User.findByIdAndDelete(req.params.userId)
-        .then(userData => {
+        .then((userData) => {
             if (!userData) {
                 return res.status(404).json({ message: 'That user does not exist!' });
             }
@@ -72,7 +72,7 @@ const userController = {
         .then(() => {
             res.json({ message: 'User and their Thoughts deleted.' });
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err);
             res.status(500).json(err);
         });
@@ -84,14 +84,14 @@ const userController = {
             { $addToSet: { friends: req.params.friendId } },
             { new: true }
         )
-        .then(userData => {
+        .then((userData) => {
             if (!userData) {
                 return res.status(404).json({ message: 'That user does not exist!' });
             }
 
             res.json(userData);
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err);
             res.status(500).json(err);
         });
@@ -103,14 +103,14 @@ const userController = {
             { $pull: { friends: req.params.friendId } },
             { new: true }
         )
-        .then(userData => {
+        .then((userData) => {
             if (!userData) {
                 return res.status(404).json({ message: 'That user does not exist!' });
             }
 
             res.json(userData);
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err);
             res.status(500).json(err);
         });

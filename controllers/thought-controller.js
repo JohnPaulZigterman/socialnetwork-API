@@ -5,8 +5,8 @@ const thoughtController = {
     getThoughts(req, res) {
         Thought.find()
         .sort({ createdAt: -1 })
-        .then(thoughtData => res.json(thoughtData))
-        .catch(err => {
+        .then((thoughtData) => res.json(thoughtData))
+        .catch((err) => {
             console.log(err);
             res.status(500).json(err);
         });
@@ -14,13 +14,13 @@ const thoughtController = {
 
     getOneThought(req, res) {
         Thought.findOne({ _id: req.params.thoughtId })
-        .then(thoughtData => {
+        .then((thoughtData) => {
             if (!thoughtData) {
                 return res.status(404).json({ message: "That user does not exist!" });
             }
             res.json(thoughtData);
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err);
             res.status(500).json(err);
         });
@@ -28,21 +28,21 @@ const thoughtController = {
 
     createThought(req, res) {
         Thought.create(req.body)
-        .then(thoughtData => {
+        .then((thoughtData) => {
             return User.findOneAndUpdate(
-                { _id: req.body.userId },
+                { userName: req.body.userName },
                 { $push: { thoughts: thoughtData._id }},
                 { new: true },
             );
         })
-        .then(userData => {
+        .then((userData) => {
             if (!userData) {
                 return res.status(404).json({ message: 'Thought created but this user does not exist!' });
             }
 
             res.json({ message: 'Thought successfully created!' });
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err);
             res.status(500).json(err);
         });
@@ -53,13 +53,13 @@ const thoughtController = {
             { $set: req.body },
             { runValidators: true, new: true},
         )
-        .then(thoughtData => {
+        .then((thoughtData) => {
             if (!thoughtData) {
                 return res.status(404).json({ message: "Thought does not exist!" });
             }
             res.json(thoughtData);
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err);
             res.status(500).json(err);
         });
@@ -67,7 +67,7 @@ const thoughtController = {
     
     deleteThought(req, res) {
         Thought.findByIdAndDelete(req.params.thoughtId)
-        .then(thoughtData => {
+        .then((thoughtData) => {
             if (!thoughtData) {
                 res.status(404).json({ message: 'No Thought with that ID!' });
             }
@@ -77,13 +77,13 @@ const thoughtController = {
                 { new: true },
             );
         })
-        .then(userData => {
+        .then((userData) => {
             if (!userData) {
                 return res.status(404).json({ message: 'Thought has been deleted but no user with this ID!' });
             }
             res.json({ message: 'Thought deleted successfully!' });
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err);
             res.status(500).json(err);
         });
@@ -95,13 +95,13 @@ const thoughtController = {
             { $addToSet: { reactions: req.body }},
             { runValidators: true, new: true },
         )
-        .then(thoughtData => {
+        .then((thoughtData) => {
             if (!thoughtData) {
                 return res.status(404).json({ message: 'That Thought does not exist!' });
             }
             res.json(thoughtData);
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err);
             res.status(500).json(err);
         });
@@ -113,13 +113,13 @@ const thoughtController = {
             { $pull: { reactions: req.body }},
             { runValidators: true, new: true },
         )
-        .then(thoughtData => {
+        .then((thoughtData) => {
             if (!thoughtData) {
                 return res.status(404).json({ message: 'That Thought does not exist!' });
             }
             res.json(thoughtData);
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err);
             res.status(500).json(err);
         });
